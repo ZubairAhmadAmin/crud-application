@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session as FacadesSession;
+use Str;
 
 class AdminController extends Controller
 {
@@ -53,8 +56,10 @@ class AdminController extends Controller
             $image_new_name = time().$image->getClientOriginalName();
             $image->move('upload', $image_new_name);
         }
+        
+        Post::create(['title'=>$request->title, 'description'=>$request->description, 'image'=>$image_new_name, 'slug'=>Str()->slug($request->title)]);
 
-        Post::create(['title'=>$request->title, 'description'=>$request->description, 'image'=>$image_new_name]);
+        Session()->flash('success', 'Your Post Created');
 
         return redirect()->route('admin.index');
     }
@@ -116,7 +121,10 @@ class AdminController extends Controller
         // use first way for update
         $admin->title = $request->title;
         $admin->description = $request->description;
+        $admin->slug = Str()->slug($request->title);
         $admin->save();
+
+        Session()->flash('success', 'Your Post Updated');
 
         // use second way for update
         // Post::where('id', $admin)->update(['title'=>$request->title, 'description'=>$request->description]);

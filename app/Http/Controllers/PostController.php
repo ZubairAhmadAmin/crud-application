@@ -12,4 +12,12 @@ class PostController extends Controller
                     ->with('page', 'post')
                     ->with('posts', Post::paginate(2));
     }
+
+    public function show($slug) {
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        return view('post.single')
+                    ->with('page', 'post')
+                    ->with('post', $post);
+    }
 }

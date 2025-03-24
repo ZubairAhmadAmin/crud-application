@@ -38,6 +38,8 @@ Route::get('/contact', [ContactController::class, 'index']);
 // Second Project
 Route::get('/', [PostController::class, 'index'])->name('post');
 
+Route::get('post/{slug}', [PostController::class, 'show'])->name('post.show');
+
 Route::resource('admin', AdminController::class);
 
 Route::get('admin/delete/{id}', [AdminController::class, 'destroy'])->name('delete');
